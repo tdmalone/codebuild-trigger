@@ -1,0 +1,57 @@
+language: python
+services: docker
+python: 3.6
+
+env:
+  global:
+
+    - AWS_ACCESS_KEY_ID=AKIAJBQKPP6GEG66GEVA
+    - AWS_DEFAULT_REGION=ap-southeast-2
+    - LAMBDA_NAME=codeBuildTrigger
+    - LAMBDA_ALIAS=prod
+    - CODEBUILD_PROJECT=sample-project
+
+    # AWS_SECRET_ACCESS_KEY
+    - secure: 1u4MIxpe5UkZvzQ9CZu/Vzyi/7cUakK2sKnvuVNB657wksJfkZTFKVezwX+8JEKcpQA8nOa8WSHpbFIP7sESrisnWITgMt/l7pWkBGMqV180Uu+jdR5L/VlTYCrjXy/+sncm+/fXDFHCM7+waboyY8TnCC1xckC32PJG0ASmTyoU7bdHQWgpy12+pEmKmK94/Qw+qBaREtUbUHaYKR3WOlXt0X2DeS6wEw7kVn3lxszcnJVODlH83AQ5MGsIF8Ml555T6Emd4yDHW2AN9t+rp3zjEn208TCqWlSI7i7FMqofJubWf4O30d1ZWu+E69txhQWlnbWluQeL5WVcuRkxxxsmSVWrVgsoirebRLqqNp9mJuEHQqUxJr1qsD41rRzMnib5Vs7rwuJ09ORslJKupRRMz6Y/3AdE5DKH5ydLnaMO41Y2pF0LhU1AHk1hGuDPZBaeCqg4C71icbRl8oP8HYbzpVireFnYvsU9kZygkz1iszY4AqYQo3x8aAKi1cynWRv4WZ33BU+icQWczxjudZ+OEv3Gbgx+qEC6W5/ffi6+zELwwuIhNqN9b7CGDkr7TRwxW9Eve2BZDjBAqyTiIX33DiK2Q3wQwo6S+8M1gHBmiIzQpqHbhvMElYFBrmfhiXZFJgkx1oS0PlKEXTBICyL7gPqVXxurF12nHsRGQ4g=
+
+install: true
+script: make test
+
+deploy:
+
+  - provider: lambda
+    publish: true
+    function_name: $LAMBDA_NAME
+    region: $AWS_DEFAULT_REGION
+    role: arn:aws:iam::873114526714:role/genericLambdaRole
+    description: Triggers CodeBuild on pushes to CodeCommit.
+    runtime: python3.6
+    timeout: 10
+    handler_name: lambda_handler
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key:
+      secure: zWWlB7ewfT8ssljqVIP51swType/GDicOBRbPonh8/t7uChPhyEOVDY9qWRHjGR7TioBYIsHpduqvwZjDbBO5rSTQmAcV9c5NV6U+0crJ81L85kUo1rbuZiMLwM6BDMyvXxadWX7b4utvX+cG1NvGtn6pcaKdTVFpXuE763b4SiU74gwl5CtH5S58pb2MUdja9bjQNG2STFTYxyFL62FuXCeH1suAz4QT2p67w4do+/qN9VhSplbFQSGDkhb41xqHE92N2pZSDlp4X/KvyNSzbN7sHS+zWpBy1CuUzTmAoOkzvCXzQTCI9W1K9KstQ3ufI7p5C4hD4RNNlr1eEUZIk0j475jDAq2CPFvEH4c1A+obD8ZxSVZbWzDM5UZxJrrjqL7KN4bg3dUNQIXHZ02vH469LCXvCn6EZ3V7oSnIqN6adc4EWq9ZMFmFw01tnwwYXRrSGDHvyOGyoCJZo36J/VjNXyeT/vK34p37D4/gE/PrUAKeYMRRjMPQ8DMbyf/coWhZeSaUGVmHwwgA7gquGdi3DdVQ+bR6akS6kS56Fw15h56aaN+5CQr65bEEbhgbeP+MkYjbtf8R0vUV5QNqJUaAPuWXQpvG6t/ZTNUtt0GuU5/8mxH8/yNaiX4sJL+sM0iSEi+s06dibawpVUhJksiURRe4dd3kWVOeVLFlKc=
+    on:
+      branch: master
+
+  - provider: pypi
+    username: tdmalone
+    password:
+      secure: IadKw5pVqlRCwA+CGwmsCM4G/ys/Qwr9Tfp8CgdrEFPnTYXmuMxJhKNQldALWv1vSmE1DANwRAl7A0CK3t//U7uDBILjwrVM5F+nnY1pOKEBXtS4qNqqw8ReQFddssYFTKSRC4seN2kSMXzvTNqzOfn2cwUTsaJOyTQpW7QD45XY2nrsxgAM6fW70GdKFdrbzeos9oNZmqE/tu1Y14QHZ6r/k1ybwVxG987Abo7tIHzyxnSPJJcVLSl8nBcLsbFRtdA+WQrAxtHo6gngzICb1K0893juVi/pONUo87DalnvrvKTdgrnfoHDvGTrylBo8Pchu1aqQSDdbvNsD5sKseK/9i8H7PwnbeVKwZD6T+YdJypgYkXixr1p2GYlkdSz+3rmaudOv+qbbKXBoaOfCsvjJlKez4nDwxhWiBkrvN8FWYuhQTbaKj0QPwE5VvgIHHdLNCgUlJXoZKUK6feCUXrJb+5+91DqSHm8pXcGYLv/HxWfA+BxWSakUggbjd+JPhZlYYsHUY5yC8Gsmk7dnD3McqeQXnFp5xTs8K6IMNzxbcxE3m7yinQWPXjifBXt7jzv6ABLtUb1DSU+iTI6CxMNDiIhthd2NLKziGfqkrD/mRMvZqYlfa32Ovb/jKD7xe7TVC2VMBO7Wodw4Orz+VnjolyLr9SiI3vYN4Vjxrcw=
+    on:
+      branch: master
+      tags: true
+
+after_deploy:
+
+  # Set a Lambda alias to the most recently deployed version.
+  - pip install awscli --upgrade --user
+  - export MOST_RECENT=$(aws lambda list-versions-by-function --function "${LAMBDA_NAME}" --max-items 10000 | node -e "let stdin=''; process.stdin.on('data',(chunk)=>{stdin+=chunk}).on('end',()=>{console.log(JSON.parse(stdin).Versions.pop().Version)})")
+  - aws lambda update-alias --function-name "${LAMBDA_NAME}" --name "${LAMBDA_ALIAS}" --function-version "${MOST_RECENT}"
+
+notifications:
+  email: false
+  slack:
+    on_start: always
+    rooms:
+      - secure: a/EIqw43Z+vTB74VT8m4TB1S8M27vujXxfRsnsUJ1rT2v8vOtsNktj4KPEOrzSC5X7fp+K4BNhnu+xLuRQSRa7xy3cktIxkXAic/mCch9z6OJjI1j1uY2CK1HkE9Ctsmm47zyOxfcoOam4hGfMA+rAyZh94P2sj+ZMh/wkh6825PbzQ6+RsV7eCzT8WVdK4Oxw8qd1PiHqV8Dyc61WRMfnIsEa1wBQLVT2lKwF/Ow+AOAkoPA+tY7/TcaH/abBACil3aMFPaxVTNJHJHTWoIRuqGRUEVRSAsOq7v47vZFS1D1HXBZxKElLYpCdg5BsNyTmLf4kjj8LGLcW/sXCrRWE+lDYTI9tws1CDqvdaqRxTKrdmg4FNUyOBf9frTPMYowH10srxOSvNDepjFnnkFAmoa4V9Q3af0l21NBLE/c0BPJHJRArdaVyGVbOaeanNm3YJnlf9j4i2ZnWwhyEt1Spoolli+SB24+jQym6+8nqDnhvllcAsJ8hlFWzcZmTy3cnR0sx8BI090SaygETmyRg4+wRzFruP+vvIGrm8LNCnAVwqlsRZwST0RDTmAKVi2Kj4/uorSLJSmSBtXkwwSUdplu4NcLQlwUxE2tZUoQweA/uC9QN+dfwlofLDIexFNR2Ag/SURjDRNyKwu4aaif7e1WE3iAyPpQ4nxso9mw3Y=
