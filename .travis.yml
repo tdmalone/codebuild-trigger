@@ -31,6 +31,7 @@ deploy:
     description: Triggers CodeBuild on pushes to CodeCommit.
     runtime: python3.6
     timeout: 10
+    module_name: lambda_function
     handler_name: lambda_handler
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key:
