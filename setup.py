@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
   name = 'code-build-trigger',
   packages = ['code-build-trigger'],
-  version = '0.0.1',
+  version = '0.0.2',
   description = 'An AWS Lambda function to triggers CodeBuild on pushes to CodeCommit.',
   author = 'Tim Malone',
   author_email = 'tdmalone@gmail.com',
