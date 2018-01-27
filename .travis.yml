@@ -46,7 +46,7 @@ deploy:
 after_deploy:
 
   # Set a Lambda alias to the most recently deployed version.
-  - pip install awscli --upgrade --user
+  - pip install awscli --upgrade
   - export MOST_RECENT=$(aws lambda list-versions-by-function --function "${LAMBDA_NAME}" --max-items 10000 | node -e "let stdin=''; process.stdin.on('data',(chunk)=>{stdin+=chunk}).on('end',()=>{console.log(JSON.parse(stdin).Versions.pop().Version)})")
   - aws lambda update-alias --function-name "${LAMBDA_NAME}" --name "${LAMBDA_ALIAS}" --function-version "${MOST_RECENT}"
 
