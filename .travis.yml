@@ -18,6 +18,9 @@ env:
 install: true
 script: make test
 
+# Copy the Lambda function as a workaround for a PyPi deployment.
+before_deploy: mkdir code-build-trigger && cp lambda_function.py code-build-trigger/
+
 deploy:
 
   - provider: lambda
@@ -39,6 +42,7 @@ deploy:
     username: tdmalone
     password:
       secure: IadKw5pVqlRCwA+CGwmsCM4G/ys/Qwr9Tfp8CgdrEFPnTYXmuMxJhKNQldALWv1vSmE1DANwRAl7A0CK3t//U7uDBILjwrVM5F+nnY1pOKEBXtS4qNqqw8ReQFddssYFTKSRC4seN2kSMXzvTNqzOfn2cwUTsaJOyTQpW7QD45XY2nrsxgAM6fW70GdKFdrbzeos9oNZmqE/tu1Y14QHZ6r/k1ybwVxG987Abo7tIHzyxnSPJJcVLSl8nBcLsbFRtdA+WQrAxtHo6gngzICb1K0893juVi/pONUo87DalnvrvKTdgrnfoHDvGTrylBo8Pchu1aqQSDdbvNsD5sKseK/9i8H7PwnbeVKwZD6T+YdJypgYkXixr1p2GYlkdSz+3rmaudOv+qbbKXBoaOfCsvjJlKez4nDwxhWiBkrvN8FWYuhQTbaKj0QPwE5VvgIHHdLNCgUlJXoZKUK6feCUXrJb+5+91DqSHm8pXcGYLv/HxWfA+BxWSakUggbjd+JPhZlYYsHUY5yC8Gsmk7dnD3McqeQXnFp5xTs8K6IMNzxbcxE3m7yinQWPXjifBXt7jzv6ABLtUb1DSU+iTI6CxMNDiIhthd2NLKziGfqkrD/mRMvZqYlfa32Ovb/jKD7xe7TVC2VMBO7Wodw4Orz+VnjolyLr9SiI3vYN4Vjxrcw=
+    skip_cleanup: true
     on:
       branch: master
       tags: true
