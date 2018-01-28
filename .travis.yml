@@ -7,7 +7,7 @@ env:
 
     - AWS_ACCESS_KEY_ID=AKIAJBQKPP6GEG66GEVA
     - AWS_DEFAULT_REGION=ap-southeast-2
-    - LAMBDA_NAME=codeBuildTrigger
+    - LAMBDA_NAME=codebuildTrigger
     - LAMBDA_ALIAS=prod
     - CODEBUILD_PROJECT=sample-project
     - CODEBUILD_COMMIT=b8fb4a829a64cc660ab70c761c9771c05eb90ac6
@@ -19,7 +19,7 @@ install: true
 script: make test
 
 # Copy the Lambda function as a workaround for a PyPi deployment.
-before_deploy: mkdir code-build-trigger && cp lambda_function.py code-build-trigger/
+before_deploy: mkdir codebuild-trigger && cp lambda_function.py codebuild-trigger/
 
 deploy:
 

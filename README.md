@@ -1,4 +1,4 @@
-# Code Build Trigger
+# CodeBuild Trigger
 
 A simple [AWS Lambda](https://aws.amazon.com/lambda/) function designed to trigger [CodeBuild](https://aws.amazon.com/codebuild/) on pushes to [CodeCommit](https://aws.amazon.com/codecommit/) (because for some reason, that's not possible by default 😜.
 
